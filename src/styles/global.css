@@ -2,7 +2,7 @@
 
 @import "@fontsource/instrument-serif/400.css";
 @import "@fontsource/instrument-serif/400-italic.css";
-@import "@fontsource-variable/geist";
+@import "@fontsource-variable/schibsted-grotesk";
 
 /* ---------------------------------------------------------------
    Designtokens for I.D Frisør.
@@ -19,7 +19,7 @@
   --color-ink: #24201A;
 
   --font-serif: "Instrument Serif", ui-serif, Georgia, serif;
-  --font-sans: "Geist Variable", ui-sans-serif, system-ui, sans-serif;
+  --font-sans: "Schibsted Grotesk Variable", ui-sans-serif, system-ui, sans-serif;
 
   --radius-card: 0.75rem;
 }
@@ -38,12 +38,31 @@
     -webkit-font-smoothing: antialiased;
   }
 
-  /* Overskrifter og sitater i Instrument Serif italic */
+  /* Overskrifter i Instrument Serif.
+     Rett skrift som standard — kursiv er reservert for heroen og sitater,
+     så den fortsatt betyr noe der den brukes. */
   h1, h2, h3, .serif {
+    font-family: var(--font-serif);
+    font-style: normal;
+    font-weight: 400;
+    letter-spacing: -0.015em;
+  }
+
+  /* Kursiv display: heroen og eventuelle sitater. */
+  .display-kursiv {
     font-family: var(--font-serif);
     font-style: italic;
     font-weight: 400;
-    letter-spacing: -0.01em;
+    letter-spacing: -0.02em;
+  }
+
+  /* Redaksjonell etikett: sperret versal, som en bildetekst i et magasin. */
+  .etikett {
+    font-family: var(--font-sans);
+    font-size: 0.75rem;
+    font-weight: 500;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
   }
 
   :focus-visible {
