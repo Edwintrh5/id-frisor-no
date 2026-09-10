@@ -1,46 +1,106 @@
 ---
+import { Image } from "astro:assets";
 import Phone from "@lucide/astro/icons/phone";
-import MapPin from "@lucide/astro/icons/map-pin";
 import { salong } from "../data/kontakt";
+
+/**
+ * Heroen er bygget rundt et bilde, ikke rundt en bakgrunnsfarge.
+ *
+ * Legg ett stående bilde i src/content/hero/, så tar det plassen til
+ * feltet til høyre ved neste bygg. Ingen kodeendring trengs — samme
+ * mekanikk som galleriet.
+ *
+ * Til det bildet finnes står feltet som en bevisst flate i dyp
+ * skoggrønn med adressen satt som redaksjonell bildetekst. Ingen
+ * gradient, ingen uskarp fargeflekk.
+ */
+const moduler = import.meta.glob<{ default: ImageMetadata }>(
+  "/src/content/hero/*.{jpg,jpeg,png,webp,avif}",
+  { eager: true },
+);
+
+const forste = Object.entries(moduler).sort(([a], [b]) =>
+  a.localeCompare(b, "nb"),
+)[0];
+
+const bilde = forste
+  ? {
+      kilde: forste[1].default,
+      alt: forste[0]
+        .split("/")
+        .pop()!
+        .replace(/\.[^.]+$/, "")
+        .replace(/^\d+[-_]/, "")
+        .replace(/[-_]+/g, " "),
+    }
+  : null;
 ---
 
-<section id="hero" class="relative overflow-hidden bg-beige-100">
-  <div
-    class="pointer-events-none absolute -top-32 -right-24 h-96 w-96 rounded-full bg-green-300/25 blur-3xl"
-    aria-hidden="true"
-  >
-  </div>
-
-  <div class="relative mx-auto max-w-5xl px-5 py-20 sm:py-28">
-    <p
-      class="flex items-center gap-2 text-sm tracking-wide text-green-600 uppercase"
+<!--
+  Bildefeltet blør ut til høyre skjermkant, så seksjonen er et rutenett
+  over hele bredden. Tekstspalten får i stedet en venstremarg regnet ut
+  fra samme 64rem-container som menyen og de andre seksjonene bruker,
+  slik at heroteksten står i flukt med resten av siden.
+-->
+<section
+  id="hero"
+  class="bg-beige-100 lg:grid lg:grid-cols-[1fr_44%] lg:items-stretch"
+>
+    <!-- Tekstspalte -->
+    <div
+      class="flex flex-col justify-center px-5 pt-16 pb-4 lg:py-32 lg:pr-16 lg:pl-[max(3rem,calc((100vw-64rem)/2+1.25rem))]"
     >
-      <MapPin size={16} stroke-width={1.5} aria-hidden="true" />
-      Trondheim sentrum
-    </p>
-
-    <h1
-      class="mt-5 max-w-3xl text-5xl leading-[1.05] text-green-900 sm:text-7xl"
-    >
-      Vi hjelper deg med håret du fortjener
-    </h1>
-
-    <p class="mt-6 max-w-xl text-lg leading-relaxed text-ink/80">
-      Dame- og herrefrisør i Vår Frue Strete, rett bak Vår Frue kirke. Over ti
-      års erfaring i faget, til en pris som ikke skremmer.
-    </p>
-
-    <div class="mt-9 flex flex-col gap-3 sm:flex-row sm:items-center">
-      <a
-        href={`tel:${salong.telefonLenke}`}
-        class="inline-flex items-center justify-center gap-2.5 rounded-full bg-green-600 px-7 py-4 text-base font-medium text-beige-100 transition-colors hover:bg-green-900"
-      >
-        <Phone size={20} stroke-width={1.5} aria-hidden="true" />
-        Ring for å bestille time
-      </a>
-      <p class="text-sm text-ink/70 sm:ml-2">
-        Vi tar bestillinger på telefon — {salong.telefonVist}
+      <p class="etikett text-green-600">
+        Dame- og herrefrisør — Trondheim sentrum
       </p>
+
+      <h1
+        class="display-kursiv mt-7 text-[3.25rem] leading-[0.98] text-green-900 sm:text-7xl lg:text-[5.25rem]"
+      >
+        Vi hjelper deg med håret du fortjener
+      </h1>
+
+      <p class="mt-8 max-w-md text-lg leading-relaxed text-ink/80">
+        Vår Frue Strete 3, rett bak kirken. Over ti års erfaring i faget,
+        til en pris som ikke skremmer.
+      </p>
+
+      <div class="mt-10 flex flex-wrap items-center gap-x-6 gap-y-4">
+        <a
+          href={`tel:${salong.telefonLenke}`}
+          class="inline-flex items-center gap-3 bg-green-900 px-8 py-4 text-base font-medium text-beige-100 transition-colors hover:bg-green-600"
+        >
+          <Phone size={19} stroke-width={1.5} aria-hidden="true" />
+          Ring for å bestille time
+        </a>
+        <a
+          href={`tel:${salong.telefonLenke}`}
+          class="text-base text-ink/70 underline-offset-4 hover:text-green-600 hover:underline"
+        >
+          {salong.telefonVist}
+        </a>
+      </div>
     </div>
-  </div>
+
+    <!-- Bildefelt -->
+    <div class="relative min-h-[26rem] lg:min-h-[44rem]">
+      {
+        bilde ? (
+          <Image
+            src={bilde.kilde}
+            alt={bilde.alt}
+            widths={[608, 1216]}
+            sizes="(min-width: 1024px) 38rem, 100vw"
+            class="absolute inset-0 h-full w-full object-cover"
+            loading="eager"
+            fetchpriority="high"
+          />
+        ) : (
+          <div class="absolute inset-0 flex flex-col justify-end bg-green-900 p-8">
+            <p class="etikett text-green-300">Vår Frue Strete 3</p>
+            <p class="etikett mt-2 text-beige-100/55">7013 Trondheim</p>
+          </div>
+        )
+      }
+    </div>
 </section>
