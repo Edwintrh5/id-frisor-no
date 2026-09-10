@@ -1,0 +1,62 @@
+---
+import Palette from "@lucide/astro/icons/palette";
+import {
+  grupper,
+  forelopig,
+  forelopigTekst,
+  prisfotnote,
+} from "../data/priser";
+---
+
+<section id="priser" class="border-t border-beige-300 bg-beige-100">
+  <div class="mx-auto max-w-5xl px-5 py-20">
+    <div class="flex flex-wrap items-center gap-x-3 gap-y-4">
+      <Palette
+        size={22}
+        strokeWidth={1.5}
+        class="text-green-600"
+        aria-hidden="true"
+      />
+      <h2 class="text-3xl text-green-900 sm:text-4xl">Priser</h2>
+
+      {
+        forelopig && (
+          <p class="rounded-full border border-green-600/35 bg-green-300/25 px-3.5 py-1.5 text-[13px] leading-snug font-medium text-green-900">
+            {forelopigTekst}
+          </p>
+        )
+      }
+    </div>
+
+    <div class="mt-12 grid gap-x-12 gap-y-10 sm:grid-cols-2">
+      {
+        grupper.map((gruppe) => (
+          <div>
+            <h3 class="border-b border-beige-300 pb-3 text-2xl text-green-900">
+              {gruppe.tittel}
+            </h3>
+            <dl class="mt-1">
+              {gruppe.linjer.map((linje) => (
+                <div class="flex items-baseline justify-between gap-4 border-b border-beige-300/70 py-4">
+                  <div class="min-w-0">
+                    <dt class="font-medium text-ink">{linje.navn}</dt>
+                    {linje.merknad && (
+                      <p class="mt-1 text-[13px] leading-snug text-ink/65">
+                        {linje.merknad}
+                      </p>
+                    )}
+                  </div>
+                  <dd class="shrink-0 font-medium whitespace-nowrap text-green-600">
+                    {linje.pris},–
+                  </dd>
+                </div>
+              ))}
+            </dl>
+          </div>
+        ))
+      }
+    </div>
+
+    <p class="mt-10 text-sm text-ink/65">{prisfotnote}</p>
+  </div>
+</section>
