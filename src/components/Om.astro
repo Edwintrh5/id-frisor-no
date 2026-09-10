@@ -1,0 +1,53 @@
+---
+import Scissors from "@lucide/astro/icons/scissors";
+import { salong } from "../data/kontakt";
+
+const punkter = [
+  {
+    tittel: "Damer og herrer",
+    tekst:
+      "Vi klipper alle, fra barneklipp til farge og striper. Samme rolige tempo uansett hvem som sitter i stolen.",
+  },
+  {
+    tittel: "Erfarne hender",
+    tekst:
+      "Over ti år i frisørfaget. Vi tar en prat om hva du ser for deg før saksen kommer fram.",
+  },
+  {
+    tittel: "Sentralt og enkelt",
+    tekst: salong.naerhet + " Du går rett inn fra gata.",
+  },
+];
+---
+
+<section id="om" class="border-t border-beige-300 bg-beige-300/40">
+  <div class="mx-auto max-w-5xl px-5 py-20">
+    <div class="flex items-center gap-3">
+      <Scissors
+        size={22}
+        strokeWidth={1.5}
+        class="text-green-600"
+        aria-hidden="true"
+      />
+      <h2 class="text-3xl text-green-900 sm:text-4xl">Om salongen</h2>
+    </div>
+
+    <p class="mt-6 max-w-2xl text-lg leading-relaxed text-ink/85">
+      I.D Frisør holder til i Vår Frue Strete 3, et steinkast fra Torvet og rett
+      bak Vår Frue kirke. Salongen er liten med vilje: du får tid, og du får
+      samme frisør å forholde deg til. Vi gir deg et ærlig råd om hva som
+      kler deg, også når svaret er å la det gro litt til.
+    </p>
+
+    <ul class="mt-12 grid gap-6 sm:grid-cols-3">
+      {
+        punkter.map((p) => (
+          <li class="rounded-card border border-beige-300 bg-beige-100 p-6">
+            <h3 class="text-xl text-green-900">{p.tittel}</h3>
+            <p class="mt-3 text-[15px] leading-relaxed text-ink/80">{p.tekst}</p>
+          </li>
+        ))
+      }
+    </ul>
+  </div>
+</section>

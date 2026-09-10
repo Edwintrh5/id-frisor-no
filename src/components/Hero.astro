@@ -1,0 +1,46 @@
+---
+import Phone from "@lucide/astro/icons/phone";
+import MapPin from "@lucide/astro/icons/map-pin";
+import { salong } from "../data/kontakt";
+---
+
+<section id="hero" class="relative overflow-hidden bg-beige-100">
+  <div
+    class="pointer-events-none absolute -top-32 -right-24 h-96 w-96 rounded-full bg-green-300/25 blur-3xl"
+    aria-hidden="true"
+  >
+  </div>
+
+  <div class="relative mx-auto max-w-5xl px-5 py-20 sm:py-28">
+    <p
+      class="flex items-center gap-2 text-sm tracking-wide text-green-600 uppercase"
+    >
+      <MapPin size={16} strokeWidth={1.5} aria-hidden="true" />
+      Trondheim sentrum
+    </p>
+
+    <h1
+      class="mt-5 max-w-3xl text-5xl leading-[1.05] text-green-900 sm:text-7xl"
+    >
+      Vi hjelper deg med håret du fortjener
+    </h1>
+
+    <p class="mt-6 max-w-xl text-lg leading-relaxed text-ink/80">
+      Dame- og herrefrisør i Vår Frue Strete, rett bak Vår Frue kirke. Over ti
+      års erfaring i faget, til en pris som ikke skremmer.
+    </p>
+
+    <div class="mt-9 flex flex-col gap-3 sm:flex-row sm:items-center">
+      <a
+        href={`tel:${salong.telefonLenke}`}
+        class="inline-flex items-center justify-center gap-2.5 rounded-full bg-green-600 px-7 py-4 text-base font-medium text-beige-100 transition-colors hover:bg-green-900"
+      >
+        <Phone size={20} strokeWidth={1.5} aria-hidden="true" />
+        Ring for å bestille time
+      </a>
+      <p class="text-sm text-ink/70 sm:ml-2">
+        Vi tar bestillinger på telefon — {salong.telefonVist}
+      </p>
+    </div>
+  </div>
+</section>
