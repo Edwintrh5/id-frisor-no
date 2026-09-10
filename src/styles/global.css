@@ -1,0 +1,62 @@
+@import "tailwindcss";
+
+@import "@fontsource/instrument-serif/400.css";
+@import "@fontsource/instrument-serif/400-italic.css";
+@import "@fontsource-variable/geist";
+
+/* ---------------------------------------------------------------
+   Designtokens for I.D Frisør.
+   Alt av farger, fonter og radius bor her og bare her.
+   Endrer du en verdi under, slår den gjennom i hele siden.
+   Ingen komponent skal inneholde en hardkodet hex-verdi.
+   --------------------------------------------------------------- */
+@theme {
+  --color-green-900: #1F2E22;
+  --color-green-600: #3F6B4A;
+  --color-green-300: #8FAE8F;
+  --color-beige-100: #F4EEE1;
+  --color-beige-300: #E4D9C2;
+  --color-ink: #24201A;
+
+  --font-serif: "Instrument Serif", ui-serif, Georgia, serif;
+  --font-sans: "Geist Variable", ui-sans-serif, system-ui, sans-serif;
+
+  --radius-card: 0.75rem;
+}
+
+@layer base {
+  html {
+    scroll-behavior: smooth;
+    /* Kompenserer for den faste toppmenyen når man hopper til en seksjon */
+    scroll-padding-top: 5rem;
+  }
+
+  body {
+    background-color: var(--color-beige-100);
+    color: var(--color-ink);
+    font-family: var(--font-sans);
+    -webkit-font-smoothing: antialiased;
+  }
+
+  /* Overskrifter og sitater i Instrument Serif italic */
+  h1, h2, h3, .serif {
+    font-family: var(--font-serif);
+    font-style: italic;
+    font-weight: 400;
+    letter-spacing: -0.01em;
+  }
+
+  :focus-visible {
+    outline: 2px solid var(--color-green-600);
+    outline-offset: 3px;
+    border-radius: 2px;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    html { scroll-behavior: auto; }
+    *, *::before, *::after {
+      animation-duration: 0.01ms !important;
+      transition-duration: 0.01ms !important;
+    }
+  }
+}
