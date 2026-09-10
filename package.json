@@ -1,0 +1,26 @@
+{
+  "name": "id-frisor-no",
+  "type": "module",
+  "version": "1.0.0",
+  "private": true,
+  "scripts": {
+    "dev": "astro dev",
+    "build": "astro build",
+    "preview": "astro preview",
+    "check": "astro check",
+    "shots": "node screenshot.mjs",
+    "qa": "node qa.mjs"
+  },
+  "dependencies": {
+    "@lucide/astro": "^1.44.0",
+    "astro": "^7.3.2"
+  },
+  "devDependencies": {
+    "@fontsource-variable/geist": "^5.3.0",
+    "@fontsource/instrument-serif": "^5.3.0",
+    "@tailwindcss/vite": "^4.3.3",
+    "playwright": "^1.50.0",
+    "tailwindcss": "^4.3.3",
+    "typescript": "^5.7.0"
+  }
+}
