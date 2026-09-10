@@ -1,0 +1,89 @@
+---
+import { Image } from "astro:assets";
+import ImageIcon from "@lucide/astro/icons/image";
+
+/**
+ * Bildene hentes rett fra mappa src/content/galleri/.
+ *
+ * Legg inn en .jpg/.png/.webp/.avif der, så dukker den opp her ved neste
+ * bygg og tar plassen til ett av "Bilde kommer"-kortene. Ingen kode
+ * trenger å endres — verken her eller andre steder.
+ */
+const moduler = import.meta.glob<{ default: ImageMetadata }>(
+  "/src/content/galleri/*.{jpg,jpeg,png,webp,avif}",
+  { eager: true },
+);
+
+const bilder = Object.entries(moduler)
+  // Sorterer på filnavn, så rekkefølgen blir forutsigbar (01-, 02- osv.).
+  .sort(([a], [b]) => a.localeCompare(b, "nb"))
+  .map(([sti, modul]) => ({
+    kilde: modul.default,
+    // Filnavnet blir alt-tekst: uten mappe, uten filendelse og uten
+    // et eventuelt rekkefølgetall foran ("01-bob-klipp" → "bob klipp").
+    alt: sti
+      .split("/")
+      .pop()!
+      .replace(/\.[^.]+$/, "")
+      .replace(/^\d+[-_]/, "")
+      .replace(/[-_]+/g, " "),
+  }));
+
+/** Antall kort i gridet. Placeholderne fyller opp det bildene ikke dekker. */
+const ANTALL_KORT = 6;
+const antallPlaceholdere = Math.max(0, ANTALL_KORT - bilder.length);
+---
+
+<section id="galleri" class="border-t border-beige-300 bg-beige-300/40">
+  <div class="mx-auto max-w-5xl px-5 py-20">
+    <div class="flex items-center gap-3">
+      <ImageIcon
+        size={22}
+        strokeWidth={1.5}
+        class="text-green-600"
+        aria-hidden="true"
+      />
+      <h2 class="text-3xl text-green-900 sm:text-4xl">Galleri</h2>
+    </div>
+
+    <p class="mt-6 max-w-xl text-lg leading-relaxed text-ink/80">
+      Et utvalg av det vi har gjort i salongen.
+    </p>
+
+    <ul class="mt-12 grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-3">
+      {
+        bilder.map((bilde) => (
+          <li class="overflow-hidden rounded-card border border-beige-300 bg-beige-100">
+            <Image
+              src={bilde.kilde}
+              alt={bilde.alt}
+              widths={[400, 800]}
+              sizes="(min-width: 1024px) 320px, (min-width: 640px) 45vw, 90vw"
+              class="aspect-[4/5] h-auto w-full object-cover"
+              loading="lazy"
+            />
+          </li>
+        ))
+      }
+
+      {
+        Array.from({ length: antallPlaceholdere }).map(() => (
+          <li
+            class="flex aspect-[4/5] items-center justify-center rounded-card border border-beige-300 bg-gradient-to-br from-green-300/45 to-beige-300"
+            aria-hidden="true"
+          >
+            <span class="serif text-lg text-green-900/70">Bilde kommer</span>
+          </li>
+        ))
+      }
+    </ul>
+
+    {
+      bilder.length === 0 && (
+        <p class="mt-6 text-sm text-ink/65">
+          Bildene er på vei. Kom innom salongen i mellomtiden.
+        </p>
+      )
+    }
+  </div>
+</section>
