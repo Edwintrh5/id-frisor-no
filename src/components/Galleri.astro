@@ -1,6 +1,5 @@
 ---
 import { Image } from "astro:assets";
-import ImageIcon from "@lucide/astro/icons/image";
 
 /**
  * Bildene hentes rett fra mappa src/content/galleri/.
@@ -36,15 +35,7 @@ const antallPlaceholdere = Math.max(0, ANTALL_KORT - bilder.length);
 
 <section id="galleri" class="border-t border-beige-300 bg-beige-300/40">
   <div class="mx-auto max-w-5xl px-5 py-20">
-    <div class="flex items-center gap-3">
-      <ImageIcon
-        size={22}
-        stroke-width={1.5}
-        class="text-green-600"
-        aria-hidden="true"
-      />
-      <h2 class="text-3xl text-green-900 sm:text-4xl">Galleri</h2>
-    </div>
+    <h2 class="text-3xl text-green-900 sm:text-4xl">Galleri</h2>
 
     <p class="mt-6 max-w-xl text-lg leading-relaxed text-ink/80">
       Et utvalg av det vi har gjort i salongen.
