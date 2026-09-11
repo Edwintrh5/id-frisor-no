@@ -1,8 +1,9 @@
 @import "tailwindcss";
 
-@import "@fontsource/instrument-serif/400.css";
-@import "@fontsource/instrument-serif/400-italic.css";
 @import "@fontsource-variable/schibsted-grotesk";
+
+/* Libre Caslon Display lastes med <link> i src/layouts/Base.astro,
+   ikke herfra. Den finnes bare i vekt 400. */
 
 /* ---------------------------------------------------------------
    Designtokens for I.D Frisør.
@@ -18,7 +19,7 @@
   --color-beige-300: #E4D9C2;
   --color-ink: #24201A;
 
-  --font-serif: "Instrument Serif", ui-serif, Georgia, serif;
+  --font-serif: "Libre Caslon Display", ui-serif, Georgia, serif;
   --font-sans: "Schibsted Grotesk Variable", ui-sans-serif, system-ui, sans-serif;
 
   --radius-card: 0.75rem;
@@ -38,9 +39,9 @@
     -webkit-font-smoothing: antialiased;
   }
 
-  /* Overskrifter i Instrument Serif.
-     Rett skrift som standard — kursiv er reservert for heroen og sitater,
-     så den fortsatt betyr noe der den brukes. */
+  /* Overskrifter i Libre Caslon Display, rett stil.
+     Fonten finnes bare i vekt 400 — be aldri om en annen vekt, da
+     syntetiserer nettleseren en falsk fet variant. */
   h1, h2, h3, .serif {
     font-family: var(--font-serif);
     font-style: normal;
@@ -48,10 +49,11 @@
     letter-spacing: -0.015em;
   }
 
-  /* Kursiv display: heroen og eventuelle sitater. */
-  .display-kursiv {
+  /* Display: heroen og eventuelle sitater. Strammere knip, som en
+     display-snitt tåler i stor grad. */
+  .display {
     font-family: var(--font-serif);
-    font-style: italic;
+    font-style: normal;
     font-weight: 400;
     letter-spacing: -0.02em;
   }
