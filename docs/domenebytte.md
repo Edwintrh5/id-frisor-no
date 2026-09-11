@@ -57,7 +57,8 @@ Domeneshop-kontoen.
    apex til www, samme oppførsel som i dag.
 4. I Domeneshop sin DNS-editor: behold DNS hos Domeneshop, fjern de
    fire A-postene og www-CNAME-en over, og sett inn Vercel sine.
-5. Vent på propagering. Sjekk med:
+5. Vent på propagering. Med TTL 14400 kan gamle svar henge igjen i
+   opptil fire timer hos dem som har besøkt siden nylig. Sjekk med:
    ```
    dig +short www.idfrisor.com
    curl -sI https://www.idfrisor.com | head -3
@@ -66,7 +67,20 @@ Domeneshop-kontoen.
    apex og www.
 7. Først da: si opp Squarespace.
 
+## Senk TTL før du bytter
+
+A-postene har i dag TTL 14400, altså fire timer. Det gjelder både
+omleggingen og en eventuell rullback: setter du noe feil, kan feilen bli
+stående i fire timer hos besøkende som allerede har slått opp domenet.
+
+Senk TTL til 300 på A-postene minst fire timer — helst et døgn — før du
+legger om. Da er både byttet og en rullback et spørsmål om minutter.
+Sett TTL tilbake til noe normalt når alt står stabilt.
+
+Er domenet alt flyttet og NS1-sonen utilgjengelig, går ikke dette å
+gjøre, og da må du bare regne med fire timers etterslep.
+
 ## Hvis noe går galt
 
-Sett tilbake postene i tabellen øverst. Med lav TTL er du tilbake på
-Squarespace i løpet av minutter.
+Sett tilbake postene i tabellen øverst. Hvor fort du er tilbake på
+Squarespace avhenger av TTL-en som gjaldt da folk sist slo opp domenet.
