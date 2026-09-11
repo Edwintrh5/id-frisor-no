@@ -1,9 +1,7 @@
 @import "tailwindcss";
 
 @import "@fontsource-variable/schibsted-grotesk";
-
-/* Libre Caslon Display lastes med <link> i src/layouts/Base.astro,
-   ikke herfra. Den finnes bare i vekt 400. */
+@import "@fontsource/libre-caslon-display/400.css";
 
 /* ---------------------------------------------------------------
    Designtokens for I.D Frisør.
