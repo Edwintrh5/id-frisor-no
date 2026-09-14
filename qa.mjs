@@ -173,6 +173,69 @@ try {
       `${tel.length} tel-lenker, alle til +4741217974`,
     );
 
+    // 9. WCAG 2.2 AA: fokusert element må ikke gjemmes bak den faste menyen.
+    // Fokus-scrolling animerer, så smooth må av før vi måler.
+    await side.addStyleTag({ content: "html{scroll-behavior:auto !important}" });
+    await side.evaluate(() => window.scrollTo(0, 0));
+    const fokuserbare = await side.evaluate(() =>
+      [...document.querySelectorAll('a[href],button,input,select,textarea,[tabindex]:not([tabindex="-1"])')]
+        .filter((e) => e.offsetParent !== null || e.classList.contains("sr-only")).length);
+    const gjemt = [];
+    for (let i = 0; i < fokuserbare + 2; i++) {
+      await side.keyboard.press("Tab");
+      await side.waitForTimeout(60);
+      const t = await side.evaluate(() => {
+        const a = document.activeElement;
+        if (!a || a === document.body) return null;
+        const b = a.getBoundingClientRect();
+        if (b.width === 0 && b.height === 0) return null;
+        // elementFromPoint respekterer z-index. Ren geometri ville gitt
+        // falskt utslag på hopp-lenka, som ligger over menyen.
+        const punkter = [
+          [b.left + b.width / 2, b.top + b.height / 2],
+          [b.left + 4, b.top + 4],
+          [b.right - 4, b.bottom - 4],
+        ];
+        let dekket = 0, av = null;
+        for (const [x, y] of punkter) {
+          if (x < 0 || y < 0 || x > innerWidth || y > innerHeight) { dekket++; continue; }
+          const el = document.elementFromPoint(x, y);
+          if (el && el !== a && !a.contains(el) && !el.contains(a)) {
+            dekket++;
+            av = el.closest("header") ? "menyen" : el.tagName.toLowerCase();
+          }
+        }
+        return dekket === punkter.length
+          ? { tekst: (a.textContent || a.tagName).trim().slice(0, 24), av }
+          : null;
+      });
+      if (t) gjemt.push(t);
+    }
+    meld(gjemt.length === 0,
+      `ingen av ${fokuserbare} fokuserbare gjemmes bak menyen ${gjemt.length ? "→ " + gjemt.map((g) => `${g.tekst} (${g.av})`).join(", ") : ""}`);
+
+    // 10. Overskriftshierarki uten nivåhopp, nøyaktig én h1
+    const overskrifter = await side.evaluate(() => {
+      const n = [...document.querySelectorAll("h1,h2,h3,h4,h5,h6")].map((e) => +e.tagName[1]);
+      const hopp = [];
+      for (let i = 1; i < n.length; i++) if (n[i] - n[i - 1] > 1) hopp.push(`${n[i - 1]}→${n[i]}`);
+      return { h1: n.filter((x) => x === 1).length, hopp };
+    });
+    meld(overskrifter.h1 === 1 && overskrifter.hopp.length === 0,
+      `overskrifter: ${overskrifter.h1} h1, ${overskrifter.hopp.length ? "nivåhopp " + overskrifter.hopp.join(" ") : "ingen nivåhopp"}`);
+
+    // 11. touch-action: manipulation fjerner ventetiden på dobbelttrykk-zoom
+    const utenTouchAction = await side.evaluate(() =>
+      [...document.querySelectorAll("a[href],button")]
+        .filter((e) => e.offsetParent && !["manipulation", "none"].includes(getComputedStyle(e).touchAction)).length);
+    meld(utenTouchAction === 0, `alle klikkflater har touch-action: manipulation`);
+
+    // 12. cursor: pointer på alt klikkbart
+    const utenPointer = await side.evaluate(() =>
+      [...document.querySelectorAll("a[href],button")]
+        .filter((e) => e.offsetParent && getComputedStyle(e).cursor !== "pointer").length);
+    meld(utenPointer === 0, `alle klikkflater har cursor: pointer`);
+
     await kontekst.close();
   }
   await nettleser.close();

@@ -2,6 +2,12 @@
 import "../styles/global.css";
 import { salong } from "../data/kontakt";
 
+// Fontene oppdages ellers først når CSS-en er parset — HTML, så CSS, så
+// font. Preload kutter det ene leddet. Bare latin-subsettene: de dekker
+// U+0000-00FF, altså også æ, ø og å. latin-ext trengs ikke for norsk.
+import caslonUrl from "@fontsource/libre-caslon-display/files/libre-caslon-display-latin-400-normal.woff2?url";
+import groteskUrl from "@fontsource-variable/schibsted-grotesk/files/schibsted-grotesk-latin-wght-normal.woff2?url";
+
 interface Props {
   tittel: string;
   beskrivelse: string;
@@ -38,6 +44,9 @@ const jsonLd = {
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <link rel="preload" href={caslonUrl} as="font" type="font/woff2" crossorigin />
+    <link rel="preload" href={groteskUrl} as="font" type="font/woff2" crossorigin />
 
     <title>{tittel}</title>
     <meta name="description" content={beskrivelse} />
